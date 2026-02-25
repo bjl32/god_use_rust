@@ -441,4 +441,9 @@ fn main() {
     me.escape_str("love");
 
     world.execute(&mut *me);
+
+
+
+
+
 }
