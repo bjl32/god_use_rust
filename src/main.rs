@@ -288,6 +288,7 @@ const LYRICS: &[&str] = &[
 "Trapped in lo-o-ove",
 ];
 
+/*
 // Display lyrics with optional timing file or interactive mode
 fn display_lyrics(lyrics: &[&str]) {
     if let Ok(file) = File::open("timing.conf") {
@@ -318,6 +319,7 @@ fn display_lyrics(lyrics: &[&str]) {
         }
     }
 }
+*/
 
 // ------------------------------------------------------------
 // Theatrical Fake Cargo Compilation
@@ -408,7 +410,7 @@ fn main() {
 
     println!("\n\x1b[32m    Finished\x1b[0m dev [unoptimized + debuginfo]\n");
 
-    display_lyrics(LYRICS);
+    // display_lyrics(LYRICS);
 
 
     let mut me: Box<dyn Thing> = Box::new(Lovable::new("Me", 0, true, -1, false));
@@ -521,13 +523,13 @@ fn main() {
         None => world.announce("God is always true."),
     }
 
-
     world.run_execution();
     world.run_execution();
     world.run_execution();
     world.run_execution();
     world.run_execution();
     world.run_execution();
+    run_real_execution();
     world.run_execution();
     world.run_execution();
     world.run_execution();
@@ -582,7 +584,6 @@ fn main() {
     // ------------------------------------------------------------
     // Real Execution Finale
     // ------------------------------------------------------------
-    run_real_execution();
 }
 
 
