@@ -338,7 +338,7 @@ fn fake_cargo_compile(lyrics: &[&str]) {
 // Execution Phase – Real rustc Chaos
 // ------------------------------------------------------------
 fn run_real_execution() {
-    println!("\n\x1b[32m   Compiling\x1b[0m Warnings.rs\n");
+    println!("\n\x1b[32m   Compiling\x1b[0m Love.rs\n");
 
     // Step 1: Write intentionally broken file
     let broken_code = r#"
@@ -347,23 +347,24 @@ fn run_real_execution() {
     fn main() {
     unsafe {
     let p: *const i32 = std::ptr::null();
-    let _x = *p; // null deref
+    let _x = *p;
 
-    let _u: i32 = std::mem::uninitialized(); // deprecated
+    let _u: i32 = std::mem::uninitialized();
 
     let v = vec![1,2,3];
     std::mem::forget(v);
 
-    does_not_exist(); // force compile error
+    I_LOVE_YOU(); //LOVE!!! LOVE!!! LOVE!!! LOVE!!! LOVE!!! LOVE!!! LOVE!!!
 }
 }
 "#;
 
-fs::write("Warnings.rs", broken_code).unwrap();
+fs::write("Love.rs", broken_code).unwrap();
 
 // Compile broken version
 let output = Command::new("rustc")
-.arg("Warnings.rs")
+.arg("--color=always")
+.arg("Love.rs")
 .stderr(Stdio::piped())
 .output()
 .expect("failed to execute rustc");
@@ -371,6 +372,7 @@ let output = Command::new("rustc")
 println!("{}", String::from_utf8_lossy(&output.stderr));
 
 println!("\n-- Attempting to fix illegal arguments --\n");
+std::thread::sleep(std::time::Duration::from_secs(2));
 
 // Step 2: Auto-fix the file
 let fixed_code = r#"
@@ -379,7 +381,7 @@ let fixed_code = r#"
 fn main() {
 unsafe {
 let p: *const i32 = std::ptr::null();
-let _ = p; // no deref
+let _ = p;
 
 #[allow(deprecated)]
 let _u: i32 = std::mem::uninitialized();
@@ -390,11 +392,12 @@ std::mem::forget(v);
 }
 "#;
 
-fs::write("Warnings.rs", fixed_code).unwrap();
+fs::write("Love.rs", fixed_code).unwrap();
 
 // Recompile fixed version
 let output2 = Command::new("rustc")
-.arg("Warnings.rs")
+.arg("--color=always")
+.arg("Love.rs")
 .stderr(Stdio::piped())
 .output()
 .expect("failed to execute rustc");
@@ -522,6 +525,7 @@ fn main() {
         Some(idx) => me.set_opinion(idx, false),
         None => world.announce("God is always true."),
     }
+    run_real_execution();
 
     world.run_execution();
     world.run_execution();
@@ -529,7 +533,6 @@ fn main() {
     world.run_execution();
     world.run_execution();
     world.run_execution();
-    run_real_execution();
     world.run_execution();
     world.run_execution();
     world.run_execution();
