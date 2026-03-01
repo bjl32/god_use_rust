@@ -317,12 +317,9 @@ fn display_lyrics(lyrics: &[&str]) {
 }
 
 // ------------------------------------------------------------
-// start code art – lyrics‑driven main function
+// start code art, DO NOT ADD ANY COMMENTS FROM THIS POINT.
 // ------------------------------------------------------------
 fn main() {
-    // ------------------------------------------------------------
-    // Lyrics display (matches song)
-    // ------------------------------------------------------------
     display_lyrics(LYRICS);
 
     let mut me: Box<dyn Thing> = Box::new(Lovable::new("Me", 0, true, -1, false));
@@ -333,87 +330,87 @@ fn main() {
     world.add_thing(&*you);
     world.start_simulation();
 
-    // If I'm a set of point, then I will give you my dimension
+
     if let Some(pointset) = me.as_pointset_mut() {
         you.add_attribute(pointset.get_dimensions().to_attribute());
         pointset.reset_dimensions();
     }
-    // If I'm a circle, then I will give you my circumference
+
     if let Some(circle) = me.as_circle_mut() {
         you.add_attribute(circle.get_circumference().to_attribute());
         circle.reset_circumference();
     }
-    // If I'm a sine wave, then you can sit on all my tangents
+
     if let Some(sine) = me.as_sine_wave() {
         you.add_action("sit", sine.get_tangent(you.get_x_position()));
     }
-    // If I approach infinity, then you can be my limitations
+
     if let Some(seq) = me.as_sequence_mut() {
         seq.set_limit(you.to_limit());
     }
 
-    // Switch my current To AC, to DC
+
     me.toggle_current();
-    // And then blind my vision
+
     me.can_see(false);
     // So dizzy, so dizzy
     me.add_feeling("dizzy");
 
-    // Oh, we can travel To AD, to BC
+
     world.time_travel_for_two("AD", 617, &*me, &*you);
     world.time_travel_for_two("BC", 3691, &*me, &*you);
-    // And we can unite So deeply, so deeply
+
     world.unite(&*me, &*you);
 
-    // If I can, if I can give you all the simulations
+
     if me.get_num_stimulations_available() >= you.get_num_stimulations_needed() {
-        // Then I can, then I can be your only satisfaction
+
         you.set_satisfaction(me.to_satisfaction());
     }
-    // If I can make you happy
+
     if you.get_feeling_index("happy") != -1 {
-        // I will run the execution
+
         me.request_execution(&mut world);
     }
-    // Though we are trapped in this strange, strange simulation
+
     world.lock_thing(&*me);
     world.lock_thing(&*you);
 
-    // If I'm an eggplant, then I will give you my nutrients
+
     if let Some(egg) = me.as_eggplant_mut() {
         you.add_attribute(egg.get_nutrients().to_attribute());
         egg.reset_nutrients();
     }
-    // If I'm a tomato, then I will give you antioxidants
+
     if let Some(tom) = me.as_tomato_mut() {
         you.add_attribute(tom.get_antioxidants().to_attribute());
         tom.reset_antioxidants();
     }
-    // If I'm a tabby cat, then I will purr for your enjoyment
+
     if let Some(cat) = me.as_tabby_cat() {
         cat.purr();
     }
-    // If I'm the only God, then you're the proof of my existence
+
     if std::ptr::addr_eq(world.get_god().as_ref() as *const _, me.as_ref() as *const _) {
         me.set_proof(you.to_proof());
     }
 
-    // Switch my gender To F, to M
+
     me.toggle_gender();
-    // And then do whatever From AM to PM
+
     world.procreate(&mut *me, &mut *you);
-    // Oh, my switch role To S, to M
+
     me.toggle_role_bdsm();
-    // So we can enter The trance, the trance
+
     world.make_high(&*me);
     world.make_high(&*you);
 
-    // If I can, if I can feel your vibrations
+
     if me.get_sense_index("vibration") {
-        // Then I can, then I can finally be completion
+
         me.add_feeling("complete");
     }
-    // Though you have left, you have left, you have left, you have left, you have left
+
     world.unlock(&*you);
     world.remove_thing(&*you);
     me.look_for(&*you, &world);
@@ -421,21 +418,21 @@ fn main() {
     me.look_for(&*you, &world);
     me.look_for(&*you, &world);
     me.look_for(&*you, &world);
-    // ... me in isolation
 
-    // If I can, if I can erase all the pointless fragments
+
+
     if me.get_memory().is_erasable() {
-        // Then maybe, then maybe you won't leave me so disheartened
+
         me.remove_feeling("disheartened");
     }
 
-    // Challenging your God, you have made some illegal arguments
+
     match me.get_opinion_index("you are here") {
         Some(idx) => me.set_opinion(idx, false),
         None => world.announce("God is always true."),
     }
 
-    // Execution, execution (many times)
+
     world.run_execution();
     world.run_execution();
     world.run_execution();
@@ -448,45 +445,47 @@ fn main() {
     world.run_execution();
     world.run_execution();
     world.run_execution();
-    // Ein, dos, trios, ne, fem, liu
+
     world.announce_with_lang("1", "de");
     world.announce_with_lang("2", "es");
     world.announce_with_lang("3", "fr");
     world.announce_with_lang("4", "kr");
     world.announce_with_lang("5", "se");
     world.announce_with_lang("6", "cn");
-    // Execution
+
     world.run_execution();
 
-    // If I can, if I can give them all the execution
+
     if world.is_executable_by(&*me) {
-        // Then I can, then I can be your only execution
+
         you.set_execution(me.to_execution());
     }
-    // If I can have you back
+
     if world.get_thing_index(&*you) != -1 {
-        // I will run the execution
+
         world.run_execution();
     }
-    // Though we are trapped, we are trapped, ah
+
     me.escape(&world);
 
-    // I've studied, I've studied how to properly love
+
     me.learn_topic("love");
-    // Question me, question me, I can answer all love
+
     me.take_exam_topic("love");
-    // I know the algebraic expression of love
+
     me.get_algebraic_expression("love");
-    // Though you are free, I am trapped, trapped in love
+
     me.escape_str("love");
 
     world.execute(&mut *me);
 
+
     // ------------------------------------------------------------
-    // Insanity execution: C programmer's first Rust (triggers warnings)
+    // End of code art. You can start to put comments here.
+    // Insanity execution that triggers shit tons of warnings
     // ------------------------------------------------------------
     unsafe {
-        // Null pointer creation – unsafe block itself triggers unsafe_code warning
+        // NPE
         let p: *const i32 = std::ptr::null();
         let _ = p; // silence unused warning
 
@@ -496,15 +495,15 @@ fn main() {
 
         // Manual memory leak
         let boxed = Box::new(42);
-        let _raw = Box::into_raw(boxed); // raw pointer not freed
+        let _raw = Box::into_raw(boxed);
 
         // Transmute – dangerous type punning
         let num: i32 = 100;
         let ptr: *const i32 = &num;
         let _ref: &i32 = std::mem::transmute(ptr); // transmute from pointer to reference
 
-        // Use of std::mem::forget (safe but causes leak)
+        // Another mem leak
         let v = vec![1, 2, 3];
-        std::mem::forget(v); // memory leak
+        std::mem::forget(v);
     }
 }
