@@ -3,6 +3,11 @@
 // ------------------------------------------------------------
 #![allow(dead_code)]
 #![allow(unused)]
+use std::thread::sleep;
+use std::time::Duration;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader};
+#![warn(deprecated, unsafe_code, unused_unsafe)]
 #[derive(Clone)]
 struct Attribute;
 struct Dimensions;
