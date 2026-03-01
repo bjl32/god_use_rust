@@ -8,6 +8,9 @@ use std::thread::sleep;
 use std::time::Duration;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+use std::process::{Command, Stdio};
+use std::io::{Write};
+use std::fs::{self};
 
 #[derive(Clone)]
 struct Attribute;
@@ -317,10 +320,96 @@ fn display_lyrics(lyrics: &[&str]) {
 }
 
 // ------------------------------------------------------------
+// Theatrical Fake Cargo Compilation
+// ------------------------------------------------------------
+fn fake_cargo_compile(lyrics: &[&str]) {
+    for line in lyrics {
+        // Cargo green color (ANSI 32)
+        println!("\x1b[32m   Compiling\x1b[0m {}", line);
+
+        let mut dummy = String::new();
+        std::io::stdin().read_line(&mut dummy).unwrap();
+    }
+}
+
+// ------------------------------------------------------------
+// Execution Phase – Real rustc Chaos
+// ------------------------------------------------------------
+fn run_real_execution() {
+    println!("\n\x1b[32m   Compiling\x1b[0m Warnings.rs\n");
+
+    // Step 1: Write intentionally broken file
+    let broken_code = r#"
+    #![warn(deprecated, unsafe_code)]
+
+    fn main() {
+    unsafe {
+    let p: *const i32 = std::ptr::null();
+    let _x = *p; // null deref
+
+    let _u: i32 = std::mem::uninitialized(); // deprecated
+
+    let v = vec![1,2,3];
+    std::mem::forget(v);
+
+    does_not_exist(); // force compile error
+}
+}
+"#;
+
+fs::write("Warnings.rs", broken_code).unwrap();
+
+// Compile broken version
+let output = Command::new("rustc")
+.arg("Warnings.rs")
+.stderr(Stdio::piped())
+.output()
+.expect("failed to execute rustc");
+
+println!("{}", String::from_utf8_lossy(&output.stderr));
+
+println!("\n-- Attempting to fix illegal arguments --\n");
+
+// Step 2: Auto-fix the file
+let fixed_code = r#"
+#![warn(deprecated, unsafe_code)]
+
+fn main() {
+unsafe {
+let p: *const i32 = std::ptr::null();
+let _ = p; // no deref
+
+#[allow(deprecated)]
+let _u: i32 = std::mem::uninitialized();
+
+let v = vec![1,2,3];
+std::mem::forget(v);
+}
+}
+"#;
+
+fs::write("Warnings.rs", fixed_code).unwrap();
+
+// Recompile fixed version
+let output2 = Command::new("rustc")
+.arg("Warnings.rs")
+.stderr(Stdio::piped())
+.output()
+.expect("failed to execute rustc");
+
+println!("{}", String::from_utf8_lossy(&output2.stderr));
+}
+// ------------------------------------------------------------
 // start code art, DO NOT ADD ANY COMMENTS FROM THIS POINT.
 // ------------------------------------------------------------
 fn main() {
+    // Theatrical compilation phase
+    fake_cargo_compile(LYRICS);
+
+    println!("\n\x1b[32m    Finished\x1b[0m dev [unoptimized + debuginfo]\n");
+
     display_lyrics(LYRICS);
+
 
     let mut me: Box<dyn Thing> = Box::new(Lovable::new("Me", 0, true, -1, false));
     let mut you: Box<dyn Thing> = Box::new(Lovable::new("You", 0, false, -1, false));
@@ -466,6 +555,7 @@ fn main() {
         world.run_execution();
     }
 
+
     me.escape(&world);
 
 
@@ -480,10 +570,23 @@ fn main() {
     world.execute(&mut *me);
 
 
+
+
+
     // ------------------------------------------------------------
     // End of code art. You can start to put comments here.
     // Insanity execution that triggers shit tons of warnings
     // ------------------------------------------------------------
+
+
+    // ------------------------------------------------------------
+    // Real Execution Finale
+    // ------------------------------------------------------------
+    run_real_execution();
+}
+
+
+    /*
     unsafe {
         // NPE
         let p: *const i32 = std::ptr::null();
@@ -506,4 +609,5 @@ fn main() {
         let v = vec![1, 2, 3];
         std::mem::forget(v);
     }
-}
+    */
+
